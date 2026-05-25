@@ -1,0 +1,14 @@
+# LLM-Uncertainty-Calibrator — Requirements
+# ─────────────────────────────────────────────────────────────────────────────
+# COLAB (install on Google Colab before running colab_inference.py):
+#   !pip install transformers torch datasets scikit-learn scipy -q
+#
+# LOCAL (install in your local venv for the Streamlit dashboard):
+#   pip install streamlit plotly pandas numpy
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Dashboard dependencies (local)
+streamlit>=1.35.0
+plotly>=5.20.0
+pandas>=2.0.0
+numpy>=1.24.0

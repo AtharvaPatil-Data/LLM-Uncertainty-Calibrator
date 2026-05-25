@@ -1,0 +1,1139 @@
+{
+  "metadata": {
+    "model": "distilbert-base-uncased",
+    "num_classes": 3,
+    "val_size": 45,
+    "test_size": 45,
+    "conf_alpha": 0.1,
+    "timestamp": "2026-05-25T16:25:21.183551Z"
+  },
+  "baseline": {
+    "accuracy": 0.3111111111111111,
+    "ece": 0.04674009614520602
+  },
+  "temperature_scaling": {
+    "optimal_temperature": 8.98632938680056,
+    "ece": 0.024916452330229433,
+    "ece_reduction": 0.02182364381497659
+  },
+  "platt_scaling": {
+    "ece": 0.0880362692477119,
+    "ece_reduction": -0.041296173102505884
+  },
+  "conformal_prediction": {
+    "coverage": 0.9111111111111111,
+    "target_coverage": 0.9,
+    "avg_set_size": 2.6222222222222222,
+    "threshold": 0.6889888048171997
+  },
+  "test_samples": [
+    {
+      "text": "Mid-cap company with moderate volatility.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3614083528518677,
+        0.3125596344470978,
+        0.32603204250335693
+      ],
+      "probs_temp_scaled": [
+        0.33640893100792835,
+        0.33101647171238496,
+        0.33257459727968663
+      ],
+      "probs_platt_scaled": [
+        0.3326947107542414,
+        0.3335790702722301,
+        0.3337262189735285
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Revenue decline of 25% year-over-year amid market share loss.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.36630645394325256,
+        0.301869660615921,
+        0.3318239152431488
+      ],
+      "probs_temp_scaled": [
+        0.3369546205196077,
+        0.3297775494598854,
+        0.333267830020507
+      ],
+      "probs_platt_scaled": [
+        0.3346733762095435,
+        0.33238640847289114,
+        0.33294021531756535
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Established brand with dominant market position.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35610824823379517,
+        0.31441205739974976,
+        0.32947972416877747
+      ],
+      "probs_temp_scaled": [
+        0.3358379634209544,
+        0.33121610375630317,
+        0.3329459328227425
+      ],
+      "probs_platt_scaled": [
+        0.3328216113987939,
+        0.3336467437176992,
+        0.3335316448835069
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Minimal exposure to cyclical industries.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3491370379924774,
+        0.31563103199005127,
+        0.3352319002151489
+      ],
+      "probs_temp_scaled": [
+        0.33508434732518017,
+        0.33134335181515534,
+        0.33357230085966455
+      ],
+      "probs_platt_scaled": [
+        0.3335803034204959,
+        0.33332579289523645,
+        0.33309390368426767
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Technology upgrade cycle requiring significant capital expenditure.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3594127893447876,
+        0.32401028275489807,
+        0.3165769577026367
+      ],
+      "probs_temp_scaled": [
+        0.3361904825308714,
+        0.33233336050102447,
+        0.33147615696810423
+      ],
+      "probs_platt_scaled": [
+        0.3298973559128225,
+        0.3352433627960597,
+        0.33485928129111775
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Patent expiration approaching for key product line.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.353655606508255,
+        0.32080286741256714,
+        0.32554152607917786
+      ],
+      "probs_temp_scaled": [
+        0.3355666617850786,
+        0.33194562444066517,
+        0.33248771377425623
+      ],
+      "probs_platt_scaled": [
+        0.33145400587471024,
+        0.33449372346970196,
+        0.33405227065558785
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Regulatory investigation into accounting practices.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.355339378118515,
+        0.31523945927619934,
+        0.32942113280296326
+      ],
+      "probs_temp_scaled": [
+        0.3357540012909983,
+        0.33130982641495477,
+        0.3329361722940469
+      ],
+      "probs_platt_scaled": [
+        0.33291732931238865,
+        0.3335557043821327,
+        0.33352696630547857
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Moderate competition in core markets affecting pricing power.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.360947847366333,
+        0.3149137794971466,
+        0.3241383731365204
+      ],
+      "probs_temp_scaled": [
+        0.33635673830511953,
+        0.33128858512576964,
+        0.3323546765691108
+      ],
+      "probs_platt_scaled": [
+        0.3321633332595727,
+        0.333887431668805,
+        0.3339492350716223
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Recent management changes impacting strategic direction.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3535158932209015,
+        0.3123437464237213,
+        0.3341403603553772
+      ],
+      "probs_temp_scaled": [
+        0.3355634410044464,
+        0.3309713708664441,
+        0.3334651881291095
+      ],
+      "probs_platt_scaled": [
+        0.3340189391462734,
+        0.3329368454987849,
+        0.3330442153549418
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Seasonal business with concentrated revenue periods.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3554428815841675,
+        0.31838124990463257,
+        0.32617586851119995
+      ],
+      "probs_temp_scaled": [
+        0.3357614869971165,
+        0.3316722984243101,
+        0.3325662145785734
+      ],
+      "probs_platt_scaled": [
+        0.33198353049258655,
+        0.33411487490776337,
+        0.33390159459965
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Strong balance sheet with ample liquidity for operations.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35064566135406494,
+        0.3199056386947632,
+        0.3294486999511719
+      ],
+      "probs_temp_scaled": [
+        0.33524118462953717,
+        0.33183579805754243,
+        0.33292301731292046
+      ],
+      "probs_platt_scaled": [
+        0.3323426261809536,
+        0.3339858796734761,
+        0.3336714941455703
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Liquidity crisis with inability to meet short-term obligations.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3608008325099945,
+        0.3070283532142639,
+        0.33217084407806396
+      ],
+      "probs_temp_scaled": [
+        0.3363556943767847,
+        0.33036898217948285,
+        0.3332753234437324
+      ],
+      "probs_platt_scaled": [
+        0.3340318415799992,
+        0.3328753944740357,
+        0.33309276394596515
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Liquidity crisis with inability to meet short-term obligations.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3608008325099945,
+        0.3070283532142639,
+        0.33217084407806396
+      ],
+      "probs_temp_scaled": [
+        0.3363556943767847,
+        0.33036898217948285,
+        0.3332753234437324
+      ],
+      "probs_platt_scaled": [
+        0.3340318415799992,
+        0.3328753944740357,
+        0.33309276394596515
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Credit rating downgraded to junk status.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.36784330010414124,
+        0.3085901141166687,
+        0.3235665559768677
+      ],
+      "probs_temp_scaled": [
+        0.33710058821005817,
+        0.33057573052081995,
+        0.3323236812691218
+      ],
+      "probs_platt_scaled": [
+        0.33291643752055056,
+        0.3333019293510841,
+        0.33378163312836534
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Revenue decline of 25% year-over-year amid market share loss.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.36630645394325256,
+        0.301869660615921,
+        0.3318239152431488
+      ],
+      "probs_temp_scaled": [
+        0.3369546205196077,
+        0.3297775494598854,
+        0.333267830020507
+      ],
+      "probs_platt_scaled": [
+        0.3346733762095435,
+        0.33238640847289114,
+        0.33294021531756535
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Regulated utility with predictable cash flows.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35439446568489075,
+        0.31241580843925476,
+        0.3331896960735321
+      ],
+      "probs_temp_scaled": [
+        0.3356576564621781,
+        0.33098135795832223,
+        0.3333609855794997
+      ],
+      "probs_platt_scaled": [
+        0.33390122700107483,
+        0.33298087453512515,
+        0.3331178984638
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Minimal exposure to cyclical industries.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3491370379924774,
+        0.31563103199005127,
+        0.3352319002151489
+      ],
+      "probs_temp_scaled": [
+        0.33508434732518017,
+        0.33134335181515534,
+        0.33357230085966455
+      ],
+      "probs_platt_scaled": [
+        0.3335803034204959,
+        0.33332579289523645,
+        0.33309390368426767
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Patent expiration approaching for key product line.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.353655606508255,
+        0.32080286741256714,
+        0.32554152607917786
+      ],
+      "probs_temp_scaled": [
+        0.3355666617850786,
+        0.33194562444066517,
+        0.33248771377425623
+      ],
+      "probs_platt_scaled": [
+        0.33145400587471024,
+        0.33449372346970196,
+        0.33405227065558785
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Revenue growth of 15% but declining profit margins.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3561002314090729,
+        0.3107174336910248,
+        0.33318236470222473
+      ],
+      "probs_temp_scaled": [
+        0.33584449069801153,
+        0.33078796670122673,
+        0.33336754260076173
+      ],
+      "probs_platt_scaled": [
+        0.3339614013196048,
+        0.3329488009511469,
+        0.3330897977292483
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Debt-to-equity ratio exceeds 3.0 with covenant violations.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35596776008605957,
+        0.32334136962890625,
+        0.3206908106803894
+      ],
+      "probs_temp_scaled": [
+        0.33581690356202726,
+        0.3322436428695318,
+        0.33193945356844096
+      ],
+      "probs_platt_scaled": [
+        0.3306345016192589,
+        0.33487345341779123,
+        0.3344920449629499
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Steady customer base with high retention rates.",
+      "true_label": 0,
+      "pred_uncalibrated": 2,
+      "probs_uncalibrated": [
+        0.3457179367542267,
+        0.3070010542869568,
+        0.3472810685634613
+      ],
+      "probs_temp_scaled": [
+        0.334742358292324,
+        0.33034719268195456,
+        0.3349104490257215
+      ],
+      "probs_platt_scaled": [
+        0.33639729283245856,
+        0.33174662574615943,
+        0.33185608142138195
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Speculative biotech with no approved products.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3573894500732422,
+        0.32106512784957886,
+        0.32154542207717896
+      ],
+      "probs_temp_scaled": [
+        0.33597052257200927,
+        0.3319871255691714,
+        0.3320423518588194
+      ],
+      "probs_platt_scaled": [
+        0.3311496511416637,
+        0.3345173272510549,
+        0.3343330216072814
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Technology disruption rendering core product obsolete.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35440582036972046,
+        0.3194607198238373,
+        0.32613351941108704
+      ],
+      "probs_temp_scaled": [
+        0.3356486439277613,
+        0.3317936025503116,
+        0.33255775352192707
+      ],
+      "probs_platt_scaled": [
+        0.3317307148905662,
+        0.3343110669273448,
+        0.33395821818208904
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Recent management changes impacting strategic direction.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3535158932209015,
+        0.3123437464237213,
+        0.3341403603553772
+      ],
+      "probs_temp_scaled": [
+        0.3355634410044464,
+        0.3309713708664441,
+        0.3334651881291095
+      ],
+      "probs_platt_scaled": [
+        0.3340189391462734,
+        0.3329368454987849,
+        0.3330442153549418
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Expansion into new markets showing mixed results.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3595799505710602,
+        0.3083418011665344,
+        0.3320782780647278
+      ],
+      "probs_temp_scaled": [
+        0.33622219449541113,
+        0.3305194162688556,
+        0.33325838923573337
+      ],
+      "probs_platt_scaled": [
+        0.33408916756634144,
+        0.33280830577991605,
+        0.3331025266537425
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Major customer bankruptcy representing 30% of revenue.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35624605417251587,
+        0.31794628500938416,
+        0.3258076012134552
+      ],
+      "probs_temp_scaled": [
+        0.3358484893441058,
+        0.3316244698126033,
+        0.3325270408432909
+      ],
+      "probs_platt_scaled": [
+        0.33205320205384065,
+        0.3340408975198248,
+        0.33390590042633445
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Regulated utility with predictable cash flows.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35439446568489075,
+        0.31241580843925476,
+        0.3331896960735321
+      ],
+      "probs_temp_scaled": [
+        0.3356576564621781,
+        0.33098135795832223,
+        0.3333609855794997
+      ],
+      "probs_platt_scaled": [
+        0.33390122700107483,
+        0.33298087453512515,
+        0.3331178984638
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Revenue growth of 15% but declining profit margins.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3561002314090729,
+        0.3107174336910248,
+        0.33318236470222473
+      ],
+      "probs_temp_scaled": [
+        0.33584449069801153,
+        0.33078796670122673,
+        0.33336754260076173
+      ],
+      "probs_platt_scaled": [
+        0.3339614013196048,
+        0.3329488009511469,
+        0.3330897977292483
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Patent expiration approaching for key product line.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.353655606508255,
+        0.32080286741256714,
+        0.32554152607917786
+      ],
+      "probs_temp_scaled": [
+        0.3355666617850786,
+        0.33194562444066517,
+        0.33248771377425623
+      ],
+      "probs_platt_scaled": [
+        0.33145400587471024,
+        0.33449372346970196,
+        0.33405227065558785
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Revenue growth of 5% year-over-year with stable profit margins.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35717272758483887,
+        0.3048345744609833,
+        0.33799272775650024
+      ],
+      "probs_temp_scaled": [
+        0.33597647142500536,
+        0.3301043399691232,
+        0.3339191886058715
+      ],
+      "probs_platt_scaled": [
+        0.33521329175134446,
+        0.3322437016830673,
+        0.3325430065655882
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Shareholder activist campaign targeting board composition.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3511565327644348,
+        0.3092074692249298,
+        0.33963602781295776
+      ],
+      "probs_temp_scaled": [
+        0.3353186878707614,
+        0.3306050254723375,
+        0.334076286656901
+      ],
+      "probs_platt_scaled": [
+        0.3349248581025364,
+        0.3325233062824462,
+        0.33255183561501733
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Customer concentration with top 3 clients representing 40% of revenue.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.36456528306007385,
+        0.3083834946155548,
+        0.32705122232437134
+      ],
+      "probs_temp_scaled": [
+        0.33675280112534495,
+        0.3305391532512156,
+        0.3327080456234395
+      ],
+      "probs_platt_scaled": [
+        0.3330226905771241,
+        0.33341079356131975,
+        0.3335665158615561
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Blue-chip stock with decades of profitability.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3602702021598816,
+        0.3080911934375763,
+        0.3316386342048645
+      ],
+      "probs_temp_scaled": [
+        0.3362963997859758,
+        0.33049191414316814,
+        0.3332116860708561
+      ],
+      "probs_platt_scaled": [
+        0.33408621212913825,
+        0.3327892893971967,
+        0.33312449847366504
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Failed product launch consuming significant capital.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3538687527179718,
+        0.31709203124046326,
+        0.32903918623924255
+      ],
+      "probs_temp_scaled": [
+        0.3355929746740495,
+        0.331519895168505,
+        0.33288713015744553
+      ],
+      "probs_platt_scaled": [
+        0.332497199802655,
+        0.33386304578247544,
+        0.3336397544148696
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Management turnover with three CFOs in two years.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3666329085826874,
+        0.30883070826530457,
+        0.3245363235473633
+      ],
+      "probs_temp_scaled": [
+        0.33697166319559296,
+        0.3305991982059788,
+        0.3324291385984281
+      ],
+      "probs_platt_scaled": [
+        0.33248795217199245,
+        0.33370784225131117,
+        0.33380420557669643
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Investment-grade credit rating with low debt-to-equity ratio.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.36674079298973083,
+        0.3114400804042816,
+        0.32181915640830994
+      ],
+      "probs_temp_scaled": [
+        0.33697938487062135,
+        0.3309056220215172,
+        0.3321149931078616
+      ],
+      "probs_platt_scaled": [
+        0.33198138284329565,
+        0.33394540390347316,
+        0.3340732132532312
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "AAA-rated government bonds with sovereign backing.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3680262565612793,
+        0.31094416975975037,
+        0.32102957367897034
+      ],
+      "probs_temp_scaled": [
+        0.33711676020895054,
+        0.33085297346243686,
+        0.3320302663286126
+      ],
+      "probs_platt_scaled": [
+        0.33217651718828045,
+        0.3337449622891731,
+        0.33407852052254644
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Seasonal business with concentrated revenue periods.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3554428815841675,
+        0.31838124990463257,
+        0.32617586851119995
+      ],
+      "probs_temp_scaled": [
+        0.3357614869971165,
+        0.3316722984243101,
+        0.3325662145785734
+      ],
+      "probs_platt_scaled": [
+        0.33198353049258655,
+        0.33411487490776337,
+        0.33390159459965
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Technology disruption rendering core product obsolete.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35440582036972046,
+        0.3194607198238373,
+        0.32613351941108704
+      ],
+      "probs_temp_scaled": [
+        0.3356486439277613,
+        0.3317936025503116,
+        0.33255775352192707
+      ],
+      "probs_platt_scaled": [
+        0.3317307148905662,
+        0.3343110669273448,
+        0.33395821818208904
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Technology upgrade cycle requiring significant capital expenditure.",
+      "true_label": 1,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3594127893447876,
+        0.32401028275489807,
+        0.3165769577026367
+      ],
+      "probs_temp_scaled": [
+        0.3361904825308714,
+        0.33233336050102447,
+        0.33147615696810423
+      ],
+      "probs_platt_scaled": [
+        0.3298973559128225,
+        0.3352433627960597,
+        0.33485928129111775
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Investment-grade credit rating with low debt-to-equity ratio.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.36674079298973083,
+        0.3114400804042816,
+        0.32181915640830994
+      ],
+      "probs_temp_scaled": [
+        0.33697938487062135,
+        0.3309056220215172,
+        0.3321149931078616
+      ],
+      "probs_platt_scaled": [
+        0.33198138284329565,
+        0.33394540390347316,
+        0.3340732132532312
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Established brand with dominant market position.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.35610824823379517,
+        0.31441205739974976,
+        0.32947972416877747
+      ],
+      "probs_temp_scaled": [
+        0.3358379634209544,
+        0.33121610375630317,
+        0.3329459328227425
+      ],
+      "probs_platt_scaled": [
+        0.3328216113987939,
+        0.3336467437176992,
+        0.3335316448835069
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Minimal exposure to cyclical industries.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3491370379924774,
+        0.31563103199005127,
+        0.3352319002151489
+      ],
+      "probs_temp_scaled": [
+        0.33508434732518017,
+        0.33134335181515534,
+        0.33357230085966455
+      ],
+      "probs_platt_scaled": [
+        0.3335803034204959,
+        0.33332579289523645,
+        0.33309390368426767
+      ],
+      "conformal_pred_set": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Blue-chip stock with decades of profitability.",
+      "true_label": 0,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3602702021598816,
+        0.3080911934375763,
+        0.3316386342048645
+      ],
+      "probs_temp_scaled": [
+        0.3362963997859758,
+        0.33049191414316814,
+        0.3332116860708561
+      ],
+      "probs_platt_scaled": [
+        0.33408621212913825,
+        0.3327892893971967,
+        0.33312449847366504
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Cybersecurity breach exposing customer financial data.",
+      "true_label": 2,
+      "pred_uncalibrated": 0,
+      "probs_uncalibrated": [
+        0.3738570213317871,
+        0.30284109711647034,
+        0.32330191135406494
+      ],
+      "probs_temp_scaled": [
+        0.3377474373982678,
+        0.3299217637413817,
+        0.3323307988603505
+      ],
+      "probs_platt_scaled": [
+        0.3333473070776595,
+        0.3329986551291858,
+        0.3336540377931547
+      ],
+      "conformal_pred_set": [
+        0,
+        2
+      ]
+    }
+  ]
+}
