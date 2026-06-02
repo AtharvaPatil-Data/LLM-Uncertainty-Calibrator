@@ -511,11 +511,16 @@ def main():
             "Platt": s["probs_platt_scaled"],
         })
         
-        st.dataframe(
-            prob_df.style.background_gradient(subset=["Uncalibrated", "Temperature", "Platt"], cmap="viridis"),
-            use_container_width=True,
-            hide_index=True,
+        prob_cols = ["Uncalibrated", "Temperature", "Platt"]
+        # highlight_max highlights the predicted class per method and needs no
+        # extra dependencies (background_gradient would require matplotlib).
+        styled = (
+            prob_df.style
+            .format({c: "{:.4f}" for c in prob_cols})
+            .highlight_max(subset=prob_cols, axis=0,
+                           props="background-color:#1f7a5a; color:#e4e9f7; font-weight:600;")
         )
+        st.dataframe(styled, use_container_width=True, hide_index=True)
         
         # Prediction set
         pred_set_names = [label_names[i] for i in s["conformal_pred_set"]]
