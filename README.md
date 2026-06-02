@@ -1,306 +1,175 @@
 # 🎯 LLM-Uncertainty-Calibrator
 
-> **Statistical Calibration & Conformal Prediction for Reliable LLM Risk Assessment**
+> **Statistical Calibration & Conformal Prediction for a Financial Language Model**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.57+-FF4B4B.svg)](https://streamlit.io)
+[![Model](https://img.shields.io/badge/Model-FinBERT-2ea44f.svg)](https://huggingface.co/ProsusAI/finbert)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-[Live Demo](#) | [Research Context](#phd-research-connection) | [Methodology](#methodology)
-
----
-
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [The Problem: Overconfident LLMs](#the-problem-overconfident-llms)
-- [Our Solution: Three Calibration Methods](#our-solution-three-calibration-methods)
-- [Key Results](#key-results)
-- [Quick Start](#quick-start)
-- [Methodology](#methodology)
-- [Dashboard Screenshots](#dashboard-screenshots)
-- [PhD Research Connection](#phd-research-connection)
-- [Technical Details](#technical-details)
-- [References](#references)
-- [Author](#author)
 
 ---
 
 ## 🔍 Overview
 
-**LLM-Uncertainty-Calibrator** evaluates and corrects the **miscalibration** problem in Large Language Models applied to financial risk classification. When an LLM says it's "95% confident," it should be correct 95% of the time — but uncalibrated models are often correct only 70% of the time. This gap creates systemic risk in high-stakes financial applications.
+**LLM-Uncertainty-Calibrator** measures and corrects the **miscalibration** of a real financial language model. When a model says it is "95% confident," it should be right about 95% of the time — but neural networks are often overconfident, which is dangerous in financial decision-making where confidence drives downstream risk decisions.
 
-This project implements three statistical calibration methods and measures improvement using **Expected Calibration Error (ECE)**, demonstrating how to make LLM confidence scores trustworthy for decision-making under uncertainty.
+This project uses **FinBERT** (`ProsusAI/finbert`), a transformer already fine-tuned on financial text, and evaluates it on the **Financial PhraseBank** — the standard peer-reviewed benchmark for financial sentiment. We then apply three calibration techniques and measure the improvement with **Expected Calibration Error (ECE)**.
 
-**Use Case:** Financial risk categorization (low/medium/high risk) from textual statements.
+**Task:** Financial sentiment classification (negative / neutral / positive) — a core financial NLP task whose calibrated confidence feeds directly into risk assessment.
 
----
-
-## ⚠️ The Problem: Overconfident LLMs
-
-Modern neural networks, including LLMs, are **poorly calibrated**:
-
-- A model predicting "90% confidence" is often correct only 60-70% of the time
-- Overconfidence increases with model size and complexity
-- Uncalibrated probabilities mislead risk assessment systems
-- **Real-world impact:** A financial chatbot giving overconfident bad advice exposes the institution to liability
-
-**Example from our evaluation:**
-```
-Uncalibrated model: "I'm 95% confident this is low risk"
-Actual accuracy at 95% confidence bin: 72%
-Gap (ECE contribution): 23 percentage points
-```
-
-This is unacceptable for regulatory compliance and fiduciary duty.
+> **Why a pre-trained model on a real benchmark?** An untrained classifier outputs near-uniform probabilities (≈1/3 per class), which makes "calibration" meaningless. FinBERT produces genuine, varied confidence scores, so calibrating them is a real, defensible exercise.
 
 ---
 
-## ✅ Our Solution: Three Calibration Methods
+## ⚠️ The Problem: Overconfident Models
 
-### 1️⃣ **Temperature Scaling**
-- **What:** Learns a single temperature parameter `T` that rescales logits before softmax
-- **How:** Minimizes negative log-likelihood on a validation set
-- **Pros:** Simple, fast, effective
-- **Math:** `calibrated_probs = softmax(logits / T)`
+- A model predicting "90% confidence" may only be correct 70% of the time.
+- Overconfidence tends to grow with model size and complexity.
+- Miscalibrated probabilities mislead any risk system built on top of them.
+- **Real-world impact:** an overconfident financial assistant exposes an institution to liability and regulatory risk.
 
-### 2️⃣ **Platt Scaling**
-- **What:** Trains a logistic regression model on validation logits
-- **How:** Learns class-specific scaling parameters
-- **Pros:** More flexible than temperature scaling
-- **Cons:** Can overfit on small validation sets
+---
 
-### 3️⃣ **Conformal Prediction**
-- **What:** Provides **prediction sets** with guaranteed coverage
-- **How:** Computes non-conformity scores and builds sets containing the true label with probability ≥ (1-α)
-- **Pros:** Distribution-free guarantees, no assumptions required
-- **Output:** "The true label is in {low_risk, medium_risk} with 90% confidence"
+## ✅ Three Calibration Methods
+
+### 1️⃣ Temperature Scaling
+Learns a single scalar `T` and rescales logits before softmax: `softmax(logits / T)`. Minimises validation negative log-likelihood. Simple, fast, and usually effective.
+
+### 2️⃣ Platt Scaling
+Fits a multinomial logistic regression on validation logits. More flexible than temperature scaling, but can **overfit** on small validation sets — a useful failure mode to observe.
+
+### 3️⃣ Conformal Prediction
+Produces **prediction sets** with a distribution-free coverage guarantee: the true label lies in the set with probability ≥ (1−α). Output looks like *"the label is in {neutral, positive} at 90% confidence."*
+
+### Metric: Expected Calibration Error (ECE)
+Weighted average gap between confidence and accuracy across bins. `ECE = Σ |acc(bin) − conf(bin)| × (|bin| / N)`. Lower is better; 0 = perfect calibration.
 
 ---
 
 ## 📊 Key Results
 
-| Metric | Baseline | Temperature Scaling | Platt Scaling | Target |
-|--------|----------|---------------------|---------------|--------|
-| **ECE** | **0.0467** | **0.0249** ↓46.7% | 0.0880 ↑worse | Lower is better |
-| **Conformal Coverage** | N/A | N/A | N/A | **91.11%** (target: 90%) |
-| **Avg Prediction Set Size** | N/A | N/A | N/A | **2.62 classes** |
+> Numbers below are produced by `colab_inference.py` and rendered live in the dashboard. Re-running the script regenerates them; fill in your latest run here.
 
-### 🎯 Key Findings
+| Metric | Baseline | Temperature Scaling | Platt Scaling |
+|--------|----------|---------------------|---------------|
+| **Test Accuracy** | _from run_ | — | — |
+| **ECE** | _from run_ | _from run_ | _from run_ |
+| **Conformal Coverage** | — | — | **~90% (target 90%)** |
+| **Avg Prediction Set Size** | — | — | _from run_ |
 
-✅ **Temperature Scaling reduced ECE by 46.7%** — nearly halving the calibration error  
-✅ **Platt Scaling made calibration worse** (ECE increased by 88%) — demonstrates that not all methods work in all contexts  
-✅ **Conformal Prediction achieved 91.11% coverage** — within 1.11 percentage points of the theoretical 90% target  
-✅ **Prediction sets excluded ~0.4 classes on average** — model is confident enough to narrow uncertainty while maintaining guarantees
-
-### 💡 Takeaway for Financial Applications
-
-**Before calibration:** Model says "95% sure" → Actually 72% accurate → **Overconfident, dangerous**  
-**After Temperature Scaling:** Model says "78% sure" → Actually 78% accurate → **Honest, trustworthy**
-
-For a Central Bank or financial regulator, this difference is critical: calibrated models enable **risk-aware decision-making** rather than blind trust in overconfident predictions.
+### What to look for
+- ✅ **Confidence spans a wide range** (≈0.5–1.0), not a flat band around 0.33 — proof the model is actually classifying.
+- ✅ **Temperature Scaling reduces ECE** — the headline calibration result.
+- ✅ **Platt Scaling may or may not help** — on small validation sets it can overfit and *increase* ECE, which is an honest, instructive finding.
+- ✅ **Conformal coverage lands near the 90% target** with **small** prediction sets (mostly 1–2 classes), i.e. the guarantee is non-trivial.
 
 ---
 
 ## 🚀 Quick Start
 
-### **1. Run Calibration on Google Colab**
+### 1. Run calibration on Google Colab
 
-1. Open [Google Colab](https://colab.research.google.com)
-2. **Runtime → Change runtime type → T4 GPU**
-3. Upload `colab_inference.py`
-4. Install dependencies:
+1. Open [Google Colab](https://colab.research.google.com) → **Runtime → Change runtime type → T4 GPU**
+2. Upload `colab_inference.py`
+3. Install dependencies:
    ```python
-   !pip install transformers torch datasets scikit-learn scipy -q
+   !pip install "transformers>=4.40" torch "datasets>=2.18,<3.0" scikit-learn scipy -q
    ```
-5. Run the evaluation:
+4. Run:
    ```python
    !python colab_inference.py
    ```
-6. Download results:
+5. Download results:
    ```python
    from google.colab import files
    files.download("results.json")
    ```
 
-**Runtime:** ~5-10 minutes on T4 GPU  
-**Output:** `results.json` with calibrated probabilities and metrics
+**Runtime:** ~2–5 minutes on a T4.
 
----
-
-### **2. Launch the Dashboard Locally**
+### 2. Launch the dashboard locally
 
 ```bash
-# Clone the repository
 git clone https://github.com/AtharvaPatil-Data/LLM-Uncertainty-Calibrator.git
 cd LLM-Uncertainty-Calibrator
-
-# Install dependencies
-pip install streamlit plotly pandas numpy
-
-# Place results.json in dashboard/data/
-cp /path/to/downloaded/results.json dashboard/data/
-
-# Launch dashboard
+pip install streamlit plotly pandas numpy matplotlib
+# place the downloaded results.json:
+cp /path/to/results.json dashboard/data/
 streamlit run dashboard/app.py
 ```
 
-The dashboard will open at `http://localhost:8501` with:
-- 📈 **Reliability Diagrams** (confidence vs accuracy)
-- 🎯 **ECE Comparison Charts**
-- 🔮 **Conformal Prediction Set Analysis**
-- 🔍 **Interactive Sample Explorer**
+Dashboard opens at `http://localhost:8501`.
 
 ---
 
 ## 🧪 Methodology
 
-### Dataset
+### Dataset — Financial PhraseBank
+Sentences drawn from financial news, each labelled **negative / neutral / positive** by annotators. We use the `sentences_50agree` subset (≥50% annotator agreement) and evaluate on a stratified sample. This is the benchmark FinBERT was designed for, so accuracy is high and confidence scores are meaningful.
 
-**Financial Risk Statements** — 180 synthetic samples (45 base × 4 augmentations)
+### Label Alignment (important detail)
+FinBERT emits classes in **its** order (`positive, negative, neutral`) while the dataset stores them in a **different** order (`negative, neutral, positive`). The script reads both orderings at runtime and remaps the dataset's labels into the model's index space, so probability column *i* always corresponds to true-label *i*. Getting this wrong is the classic bug that makes a working model look random.
 
-Example:
-```
-"Company maintains strong cash reserves and consistent dividend payments." 
-→ Label: low_risk
+### Pipeline
+1. Run FinBERT over each sentence, extract raw **logits**.
+2. Convert to uncalibrated probabilities via softmax.
+3. Learn calibration parameters on the **calibration half** (Temperature `T`, Platt regression, conformal threshold).
+4. Apply to the **test half**.
+5. Report accuracy, ECE (before/after), conformal coverage and set sizes.
 
-"Debt-to-equity ratio exceeds 3.0 with covenant violations." 
-→ Label: high_risk
-```
+**Split:** 50% calibration / 50% test, stratified.
 
-**Train/Val/Test Split:**
-- Validation: 50% (used for calibration)
-- Test: 50% (used for evaluation)
+### Conformal Prediction
+1. Non-conformity score on calibration set: `s(x,y) = 1 − P(y | x)`.
+2. Threshold `q` at the `⌈(n+1)(1−α)⌉/n` quantile of scores.
+3. Include class *i* in the test prediction set if `1 − P(i | x) ≤ q`.
 
----
-
-### Expected Calibration Error (ECE)
-
-ECE quantifies the gap between confidence and accuracy:
-
-```
-ECE = Σ (|accuracy(bin_i) - confidence(bin_i)|) × (|bin_i| / N)
-```
-
-**Interpretation:**
-- ECE = 0.00 → Perfect calibration
-- ECE = 0.05 → 5 percentage point average gap
-- ECE = 0.20 → Severely miscalibrated
-
-**Our Results:**
-- Baseline: 0.0467 (moderate miscalibration)
-- Temperature Scaled: 0.0249 (well-calibrated)
+With α = 0.1 this targets **90%** marginal coverage.
 
 ---
 
-### Conformal Prediction Details
+## 📸 Dashboard
 
-**Goal:** Provide prediction sets with guaranteed coverage ≥ (1-α)
+The Streamlit dashboard includes:
+- **Reliability diagram** — confidence vs accuracy for all three methods.
+- **Confidence distribution** — violin plots showing the spread of max-probabilities.
+- **ECE comparison** — bar chart + method table.
+- **Conformal prediction** — set-size distribution and worked examples.
+- **Sample explorer** — per-sentence probabilities across all methods.
 
-**Algorithm:**
-1. Compute non-conformity scores on calibration set: `score(x, y) = 1 - P(y | x)`
-2. Find threshold q at (1-α) quantile of scores
-3. For test sample x, include class i in prediction set if: `1 - P(i | x) ≤ q`
-
-**Result:** With α=0.1 (90% target), achieved **91.11% empirical coverage** on test set.
-
----
-
-## 📸 Dashboard Screenshots
-
-### 🎯 Calibration Performance Overview
-![KPI Dashboard](screenshots/kpi_overview.png)
-*4 key metrics showing baseline ECE, calibrated ECE, conformal coverage, and prediction set size*
-
-### 📈 Reliability Diagram
-![Reliability Diagram](screenshots/reliability_diagram.png)
-*Confidence vs accuracy scatter plot showing uncalibrated (red), temperature scaled (teal), and Platt scaled (purple) methods.*
-
-### 🎯 ECE Comparison
-![ECE Comparison](screenshots/ece_comparison.png)
-*Horizontal bar chart showing Expected Calibration Error reduction. Temperature Scaling achieved 46.7% improvement.*
-
-### 🔮 Conformal Prediction Sets
-![Conformal Sets](screenshots/conformal_sets.png)
-*Distribution of prediction set sizes. Average: 2.62 classes per prediction (excludes ~0.4 classes while maintaining 91% coverage).*
-
-### 🔍 Interactive Sample Explorer
-![Sample Explorer](screenshots/sample_explorer.png)
-*Drill down into individual predictions with side-by-side probability comparison across all three methods.*
+*(Add screenshots to `screenshots/` and reference them here.)*
 
 ---
 
 ## 🎓 PhD Research Connection
 
-This project directly addresses core themes of the **Central Bank of Ireland PhD Programme** on *"Framework for Interpretable and Behavioural Risk Assessment of Intelligent Language Models"*:
+Directly supports the **Central Bank of Ireland PhD Programme** — *"Framework for Interpretable and Behavioural Risk Assessment of Intelligent Language Models"*:
 
-### **1. Decision-Making Under Uncertainty**
-- **Challenge:** Financial institutions need reliable uncertainty estimates for risk assessment
-- **Our Solution:** Calibration transforms overconfident scores into trustworthy probabilities
-- **Impact:** Enables confidence-aware routing (high uncertainty → human review)
-
-### **2. Risk Assessment in Financial Services**
-- **Challenge:** LLM-powered advisory chatbots can give dangerous overconfident advice
-- **Our Solution:** Post-hoc calibration corrects miscalibration without retraining
-- **Impact:** Reduces liability risk and improves regulatory compliance
-
-### **3. Statistical Rigor & Formal Guarantees**
-- **Challenge:** Black-box neural networks lack formal guarantees
-- **Our Solution:** Conformal Prediction provides distribution-free coverage guarantees
-- **Impact:** "With 90% probability, the true risk category is in this set" is a provable statement
-
-### **4. Interpretability & Explainability**
-- **Challenge:** Users don't understand why a model is "95% confident"
-- **Our Solution:** Reliability diagrams visualize calibration quality; prediction sets make uncertainty explicit
-- **Impact:** Regulators and end-users can audit model trustworthiness
+- **Decision-Making Under Uncertainty** — calibration turns overconfident scores into trustworthy probabilities for downstream risk decisions.
+- **Risk Assessment in Financial Services** — post-hoc calibration corrects miscalibration without retraining.
+- **Statistical Rigour & Formal Guarantees** — conformal prediction gives distribution-free coverage guarantees.
+- **Interpretability** — reliability diagrams and prediction sets make uncertainty explicit and auditable.
 
 ---
 
 ## 🔧 Technical Details
 
-### **Model Architecture**
-- Base Model: `distilbert-base-uncased` (66M parameters)
-- Task: Sequence classification (3 classes)
-- Fine-tuning: None (using pre-trained weights as-is)
-
-### **Calibration Methods**
-
-| Method | Parameters Learned | Training Data Needed | Complexity |
-|--------|-------------------|---------------------|------------|
-| Temperature Scaling | 1 (scalar T) | Validation logits + labels | O(1) |
-| Platt Scaling | 6 (2 per class for 3-class) | Validation logits + labels | O(classes) |
-| Conformal Prediction | 0 (non-parametric) | Calibration probs + labels | O(n_cal) |
-
-### **Evaluation Metrics**
-- **ECE (Expected Calibration Error):** Weighted average gap between confidence and accuracy
-- **Coverage:** % of test samples where true label is in prediction set
-- **Avg Set Size:** Mean number of classes in prediction sets
-
-### **Environment**
-- **Colab:** Google Colab (T4 GPU, 16GB VRAM)
-- **Local:** Streamlit dashboard (CPU-only)
-- **Libraries:** Transformers 4.x, PyTorch 2.x, scikit-learn, Plotly
+- **Model:** `ProsusAI/finbert` (BERT-base fine-tuned on financial text, 3-class)
+- **Dataset:** `financial_phrasebank` (`sentences_50agree`)
+- **Calibration:** Temperature Scaling (1 param), Platt Scaling (multinomial logistic), Conformal Prediction (non-parametric)
+- **Metrics:** Accuracy, ECE (10-bin), conformal coverage, average set size
+- **Compute:** Colab T4 GPU for inference; Streamlit (CPU) for the dashboard
 
 ---
 
 ## 📚 References
 
-### **Foundational Papers**
-
-1. **Guo, C., Pleiss, G., Sun, Y., & Weinberger, K. Q. (2017)**  
-   *On Calibration of Modern Neural Networks*  
-   International Conference on Machine Learning (ICML)  
-   [Paper](https://arxiv.org/abs/1706.04599)
-
-2. **Platt, J. (1999)**  
-   *Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods*
-
-3. **Vovk, V., Gammerman, A., & Shafer, G. (2005)**  
-   *Algorithmic Learning in a Random World*, Springer
-
-4. **Angelopoulos, A. N., & Bates, S. (2021)**  
-   *A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification*  
-   [Tutorial](https://arxiv.org/abs/2107.07511)
+1. **Guo, C., Pleiss, G., Sun, Y., & Weinberger, K. Q. (2017).** *On Calibration of Modern Neural Networks.* ICML. [arXiv:1706.04599](https://arxiv.org/abs/1706.04599)
+2. **Platt, J. (1999).** *Probabilistic Outputs for Support Vector Machines.*
+3. **Vovk, V., Gammerman, A., & Shafer, G. (2005).** *Algorithmic Learning in a Random World.* Springer.
+4. **Angelopoulos, A. N., & Bates, S. (2021).** *A Gentle Introduction to Conformal Prediction.* [arXiv:2107.07511](https://arxiv.org/abs/2107.07511)
+5. **Malo, P. et al. (2014).** *Good Debt or Bad Debt: Detecting Semantic Orientations in Economic Texts* (Financial PhraseBank).
+6. **Araci, D. (2019).** *FinBERT: Financial Sentiment Analysis with Pre-trained Language Models.* [arXiv:1908.10063](https://arxiv.org/abs/1908.10063)
 
 ---
 
@@ -308,13 +177,13 @@ This project directly addresses core themes of the **Central Bank of Ireland PhD
 
 ```
 LLM-Uncertainty-Calibrator/
-├── colab_inference.py          # Main evaluation script (run on Colab)
+├── colab_inference.py          # FinBERT + Financial PhraseBank calibration (run on Colab)
 ├── dashboard/
 │   ├── app.py                  # Streamlit dashboard UI
-│   ├── plots.py                # Plotly visualization functions
+│   ├── plots.py                # Plotly visualizations
 │   └── data/
-│       └── results.json        # Calibration results
-├── screenshots/                # Dashboard screenshots for README
+│       └── results.json        # Results from colab_inference.py
+├── screenshots/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
@@ -322,19 +191,11 @@ LLM-Uncertainty-Calibrator/
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
 ## 👤 Author
 
-**Atharva Patil**  
-MSc Computing (Data Analytics), Dublin City University  
-PhD Applicant — Central Bank of Ireland PhD Programme  
-
-- 🌐 GitHub: [github.com/AtharvaPatil-Data](https://github.com/AtharvaPatil-Data)
+**Atharva Patil** — MSc Computing (Data Analytics), Dublin City University
+PhD Applicant, Central Bank of Ireland PhD Programme
+GitHub: [github.com/AtharvaPatil-Data](https://github.com/AtharvaPatil-Data)
 
 ---
 
@@ -345,10 +206,6 @@ PhD Applicant — Central Bank of Ireland PhD Programme
 
 ---
 
-<div align="center">
+## 📄 License
 
-**⭐ If this project helped you understand LLM calibration, please consider starring it!**
-
-[⬆ Back to Top](#-llm-uncertainty-calibrator)
-
-</div>
+MIT License.

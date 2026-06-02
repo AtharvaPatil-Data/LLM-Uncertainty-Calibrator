@@ -91,6 +91,11 @@ st.markdown("""
         padding: 1.5rem;
         text-align: center;
         transition: all 0.3s ease;
+        min-height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
     
     .metric-card:hover {
@@ -220,6 +225,9 @@ st.markdown("""
     .badge-low { background: rgba(100, 255, 218, 0.15); color: #64ffda; }
     .badge-medium { background: rgba(255, 203, 107, 0.15); color: #ffcb6b; }
     .badge-high { background: rgba(255, 83, 112, 0.15); color: #ff5370; }
+    .badge-positive { background: rgba(195, 232, 141, 0.15); color: #c3e88d; }
+    .badge-neutral { background: rgba(255, 203, 107, 0.15); color: #ffcb6b; }
+    .badge-negative { background: rgba(255, 83, 112, 0.15); color: #ff5370; }
     
     /* Sidebar styling */
     .css-1d391kg {
@@ -275,6 +283,11 @@ def main():
     temp = results["temperature_scaling"]
     platt = results["platt_scaling"]
     conf = results["conformal_prediction"]
+
+    # Class names come from the experiment metadata so the dashboard adapts to
+    # whatever task/dataset was evaluated (falls back to generic labels).
+    n_classes = meta.get("num_classes", 3)
+    CLASS_NAMES = meta.get("class_names", [f"Class {i}" for i in range(n_classes)])
     
     # ── Hero Header ───────────────────────────────────────────────────────────
     st.markdown("""
@@ -288,17 +301,22 @@ def main():
     with st.sidebar:
         st.markdown("### ⚙️ Experiment Configuration")
         st.markdown(f"**Model:** `{meta['model']}`")
-        st.markdown(f"**Classes:** {meta['num_classes']}")
+        if meta.get("dataset"):
+            st.markdown(f"**Dataset:** `{meta['dataset']}`")
+        st.markdown(f"**Classes:** {', '.join(CLASS_NAMES)}")
         st.markdown(f"**Test Samples:** {meta['test_size']}")
+        if "accuracy" in baseline:
+            st.markdown(f"**Test Accuracy:** {baseline['accuracy']:.1%}")
         st.markdown(f"**Conformal α:** {meta['conf_alpha']}")
         
         st.divider()
         
         st.markdown("### 📊 About")
         st.markdown(
-            "This dashboard evaluates **uncertainty calibration** for financial risk classification. "
-            "Uncalibrated models are overconfident — saying '95% sure' when they should say '70% sure'. "
-            "We apply three calibration methods and measure improvement using **Expected Calibration Error (ECE)**."
+            "This dashboard evaluates **uncertainty calibration** for a financial "
+            "language model. Uncalibrated models are overconfident — saying '95% sure' "
+            "when they should say '70% sure'. We apply three calibration methods and "
+            "measure improvement using **Expected Calibration Error (ECE)**."
         )
         
         st.divider()
@@ -318,6 +336,7 @@ def main():
     <div class="metric-card">
         <div class="metric-label">Baseline ECE</div>
         <div class="metric-value metric-danger">{baseline['ece']:.4f}</div>
+        <div class="metric-delta metric-danger">uncalibrated</div>
     </div>
     """, unsafe_allow_html=True)
     
@@ -437,7 +456,7 @@ def main():
         st.markdown('<div class="section-header">Example Prediction Sets</div>', unsafe_allow_html=True)
         
         samples = results["test_samples"]
-        label_names = ["Low Risk", "Medium Risk", "High Risk"]
+        label_names = CLASS_NAMES
         
         for i in range(min(5, len(samples))):
             s = samples[i]
@@ -446,13 +465,14 @@ def main():
             correct = s["true_label"] in s["conformal_pred_set"]
             badge_class = "badge-correct" if correct else "badge-incorrect"
             badge_text = "✓ Covered" if correct else "✗ Missed"
+            label_badge = "badge-" + true_label.lower().replace(' ', '-')
             
             st.markdown(f"""
             <div class="sample-card">
                 <div class="sample-text">"{s['text'][:150]}..."</div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
-                        <span class="badge badge-{true_label.lower().replace(' ', '-')}">{true_label}</span>
+                        <span class="badge {label_badge}">{true_label}</span>
                         <span style="color: #8892b0; margin: 0 0.5rem;">→</span>
                         <span style="color: #e4e9f7; font-family: 'JetBrains Mono', monospace;">
                             {{{', '.join(pred_set)}}}
@@ -469,14 +489,15 @@ def main():
         # Sample selector
         sample_idx = st.slider("Select Sample", 0, len(results["test_samples"]) - 1, 0)
         s = results["test_samples"][sample_idx]
-        label_names = ["Low Risk", "Medium Risk", "High Risk"]
+        label_names = CLASS_NAMES
         
         # Display text
         true_label = label_names[s["true_label"]]
+        label_badge = "badge-" + true_label.lower().replace(' ', '-')
         st.markdown(f"""
         <div class="sample-card">
             <div class="sample-text">"{s['text']}"</div>
-            <span class="badge badge-{true_label.lower().replace(' ', '-')}">True: {true_label}</span>
+            <span class="badge {label_badge}">True: {true_label}</span>
         </div>
         """, unsafe_allow_html=True)
         

@@ -406,6 +406,10 @@ def plot_probability_heatmap(results: dict, method: str = 'uncalibrated') -> go.
     probs = np.array([s[prob_key] for s in samples])
     true_labels = np.array([s["true_label"] for s in samples])
     
+    # Class names from metadata (falls back to generic labels)
+    meta = results.get("metadata", {})
+    class_names = meta.get("class_names") or [f"Class {i}" for i in range(probs.shape[1])]
+    
     # Sort by true label for better visualization
     sorted_idx = np.argsort(true_labels)
     probs_sorted = probs[sorted_idx]
@@ -413,7 +417,7 @@ def plot_probability_heatmap(results: dict, method: str = 'uncalibrated') -> go.
     
     fig = go.Figure(data=go.Heatmap(
         z=probs_sorted,
-        x=['Low Risk', 'Medium Risk', 'High Risk'],
+        x=class_names,
         y=[f'Sample {i+1}' for i in range(len(samples))],
         colorscale=[
             [0.0, BG],
