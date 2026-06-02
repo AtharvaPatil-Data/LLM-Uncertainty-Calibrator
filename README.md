@@ -2,10 +2,13 @@
 
 > **Statistical Calibration & Conformal Prediction for a Financial Language Model**
 
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Streamlit_Cloud-FF4B4B.svg)](https://llm-uncertainty-calibrator-fclovm2shodudx8cl5k6st.streamlit.app/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.57+-FF4B4B.svg)](https://streamlit.io)
 [![Model](https://img.shields.io/badge/Model-FinBERT-2ea44f.svg)](https://huggingface.co/ProsusAI/finbert)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**▶️ Try the live dashboard:** https://llm-uncertainty-calibrator-fclovm2shodudx8cl5k6st.streamlit.app/
 
 ---
 
@@ -13,7 +16,7 @@
 
 **LLM-Uncertainty-Calibrator** measures and corrects the **miscalibration** of a real financial language model. When a model says it is "95% confident," it should be right about 95% of the time — but neural networks are often overconfident, which is dangerous in financial decision-making where confidence drives downstream risk decisions.
 
-This project uses **FinBERT** (`ProsusAI/finbert`), a transformer already fine-tuned on financial text, and evaluates it on the **Financial PhraseBank** — the standard peer-reviewed benchmark for financial sentiment. We then apply three calibration techniques and measure the improvement with **Expected Calibration Error (ECE)**.
+This project uses **FinBERT** (`ProsusAI/finbert`), a transformer already fine-tuned on financial text, and evaluates it on a **financial sentiment benchmark**. By default it uses the **Twitter Financial News Sentiment** dataset (Parquet-native, loads on any environment); it will automatically prefer the **Financial PhraseBank** if that dataset is available. We then apply three calibration techniques and measure the improvement with **Expected Calibration Error (ECE)**.
 
 **Task:** Financial sentiment classification (negative / neutral / positive) — a core financial NLP task whose calibrated confidence feeds directly into risk assessment.
 
@@ -48,14 +51,16 @@ Weighted average gap between confidence and accuracy across bins. `ECE = Σ |acc
 
 ## 📊 Key Results
 
-> Numbers below are produced by `colab_inference.py` and rendered live in the dashboard. Re-running the script regenerates them; fill in your latest run here.
+> Numbers below are from a run on the Twitter Financial News Sentiment set (300 held-out samples); re-running `colab_inference.py` regenerates them and the dashboard renders them live.
 
 | Metric | Baseline | Temperature Scaling | Platt Scaling |
 |--------|----------|---------------------|---------------|
-| **Test Accuracy** | _from run_ | — | — |
-| **ECE** | _from run_ | _from run_ | _from run_ |
-| **Conformal Coverage** | — | — | **~90% (target 90%)** |
-| **Avg Prediction Set Size** | — | — | _from run_ |
+| **Test Accuracy** | 73.0% | — | — |
+| **ECE** | 0.0948 | **0.0414** (↓56%) | 0.0682 (↓28%) |
+| **Conformal Coverage** | — | — | **91.7%** (target 90%) |
+| **Avg Prediction Set Size** | — | — | **1.54** classes |
+
+**Temperature found:** T = 1.28 (T > 1 confirms the model was overconfident).
 
 ### What to look for
 - ✅ **Confidence spans a wide range** (≈0.5–1.0), not a flat band around 0.33 — proof the model is actually classifying.
@@ -104,11 +109,11 @@ Dashboard opens at `http://localhost:8501`.
 
 ## 🧪 Methodology
 
-### Dataset — Financial PhraseBank
-Sentences drawn from financial news, each labelled **negative / neutral / positive** by annotators. We use the `sentences_50agree` subset (≥50% annotator agreement) and evaluate on a stratified sample. This is the benchmark FinBERT was designed for, so accuracy is high and confidence scores are meaningful.
+### Dataset — Financial Sentiment
+The script evaluates on a financial sentiment benchmark with three classes. It first tries the **Financial PhraseBank** (sentences from financial news, labelled negative / neutral / positive), and if that dataset cannot be loaded in the current environment it automatically falls back to the **Twitter Financial News Sentiment** dataset (financial-news headlines labelled Bearish / Bullish / Neutral, which map to negative / positive / neutral). Both are genuine financial-text benchmarks, so FinBERT produces meaningful, varied confidence scores — exactly what makes calibration worth studying. The results shown here were produced on the Twitter Financial News Sentiment set (≈73% accuracy on 300 held-out samples).
 
 ### Label Alignment (important detail)
-FinBERT emits classes in **its** order (`positive, negative, neutral`) while the dataset stores them in a **different** order (`negative, neutral, positive`). The script reads both orderings at runtime and remaps the dataset's labels into the model's index space, so probability column *i* always corresponds to true-label *i*. Getting this wrong is the classic bug that makes a working model look random.
+FinBERT emits classes in **its** order (`positive, negative, neutral`) while a dataset may store them in a **different** order or under different names (PhraseBank: `negative, neutral, positive`; Twitter: `Bearish, Bullish, Neutral`). The script canonicalises each dataset label to FinBERT's vocabulary (e.g. Bearish→negative, Bullish→positive) and remaps the dataset's labels into the model's index space, so probability column *i* always corresponds to true-label *i*. Getting this wrong is the classic bug that makes a working model look random.
 
 ### Pipeline
 1. Run FinBERT over each sentence, extract raw **logits**.
@@ -155,7 +160,7 @@ Directly supports the **Central Bank of Ireland PhD Programme** — *"Framework 
 ## 🔧 Technical Details
 
 - **Model:** `ProsusAI/finbert` (BERT-base fine-tuned on financial text, 3-class)
-- **Dataset:** `financial_phrasebank` (`sentences_50agree`)
+- **Dataset:** Twitter Financial News Sentiment (default) or `financial_phrasebank` (`sentences_50agree`) when available
 - **Calibration:** Temperature Scaling (1 param), Platt Scaling (multinomial logistic), Conformal Prediction (non-parametric)
 - **Metrics:** Accuracy, ECE (10-bin), conformal coverage, average set size
 - **Compute:** Colab T4 GPU for inference; Streamlit (CPU) for the dashboard
