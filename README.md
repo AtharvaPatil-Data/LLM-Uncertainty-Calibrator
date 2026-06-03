@@ -14,11 +14,11 @@
 
 ## 🔍 Overview
 
-**LLM-Uncertainty-Calibrator** measures and corrects the **miscalibration** of a real financial language model. When a model says it is "95% confident," it should be right about 95% of the time — but neural networks are often overconfident, which is dangerous in financial decision-making where confidence drives downstream risk decisions.
+**LLM-Uncertainty-Calibrator** measures and corrects the **miscalibration** of a real financial language model. When a model says it is "95% confident," it should be right about 95% of the time but neural networks are often overconfident, which is dangerous in financial decision-making where confidence drives downstream risk decisions.
 
 This project uses **FinBERT** (`ProsusAI/finbert`), a transformer already fine-tuned on financial text, and evaluates it on a **financial sentiment benchmark**. By default it uses the **Twitter Financial News Sentiment** dataset (Parquet-native, loads on any environment); it will automatically prefer the **Financial PhraseBank** if that dataset is available. We then apply three calibration techniques and measure the improvement with **Expected Calibration Error (ECE)**.
 
-**Task:** Financial sentiment classification (negative / neutral / positive) — a core financial NLP task whose calibrated confidence feeds directly into risk assessment.
+**Task:** Financial sentiment classification (negative / neutral / positive) a core financial NLP task whose calibrated confidence feeds directly into risk assessment.
 
 > **Why a pre-trained model on a real benchmark?** An untrained classifier outputs near-uniform probabilities (≈1/3 per class), which makes "calibration" meaningless. FinBERT produces genuine, varied confidence scores, so calibrating them is a real, defensible exercise.
 
@@ -63,9 +63,9 @@ Weighted average gap between confidence and accuracy across bins. `ECE = Σ |acc
 **Temperature found:** T = 1.28 (T > 1 confirms the model was overconfident).
 
 ### What to look for
-- ✅ **Confidence spans a wide range** (≈0.5–1.0), not a flat band around 0.33 — proof the model is actually classifying.
-- ✅ **Temperature Scaling reduces ECE** — the headline calibration result.
-- ✅ **Platt Scaling may or may not help** — on small validation sets it can overfit and *increase* ECE, which is an honest, instructive finding.
+- ✅ **Confidence spans a wide range** (≈0.5–1.0), not a flat band around 0.33 proof the model is actually classifying.
+- ✅ **Temperature Scaling reduces ECE** the headline calibration result.
+- ✅ **Platt Scaling may or may not help** on small validation sets it can overfit and *increase* ECE, which is an honest, instructive finding.
 - ✅ **Conformal coverage lands near the 90% target** with **small** prediction sets (mostly 1–2 classes), i.e. the guarantee is non-trivial.
 
 ---
@@ -109,8 +109,8 @@ Dashboard opens at `http://localhost:8501`.
 
 ## 🧪 Methodology
 
-### Dataset — Financial Sentiment
-The script evaluates on a financial sentiment benchmark with three classes. It first tries the **Financial PhraseBank** (sentences from financial news, labelled negative / neutral / positive), and if that dataset cannot be loaded in the current environment it automatically falls back to the **Twitter Financial News Sentiment** dataset (financial-news headlines labelled Bearish / Bullish / Neutral, which map to negative / positive / neutral). Both are genuine financial-text benchmarks, so FinBERT produces meaningful, varied confidence scores — exactly what makes calibration worth studying. The results shown here were produced on the Twitter Financial News Sentiment set (≈73% accuracy on 300 held-out samples).
+### Dataset Financial Sentiment
+The script evaluates on a financial sentiment benchmark with three classes. It first tries the **Financial PhraseBank** (sentences from financial news, labelled negative / neutral / positive), and if that dataset cannot be loaded in the current environment it automatically falls back to the **Twitter Financial News Sentiment** dataset (financial-news headlines labelled Bearish / Bullish / Neutral, which map to negative / positive / neutral). Both are genuine financial-text benchmarks, so FinBERT produces meaningful, varied confidence scores exactly what makes calibration worth studying. The results shown here were produced on the Twitter Financial News Sentiment set (≈73% accuracy on 300 held-out samples).
 
 ### Label Alignment (important detail)
 FinBERT emits classes in **its** order (`positive, negative, neutral`) while a dataset may store them in a **different** order or under different names (PhraseBank: `negative, neutral, positive`; Twitter: `Bearish, Bullish, Neutral`). The script canonicalises each dataset label to FinBERT's vocabulary (e.g. Bearish→negative, Bullish→positive) and remaps the dataset's labels into the model's index space, so probability column *i* always corresponds to true-label *i*. Getting this wrong is the classic bug that makes a working model look random.
@@ -136,11 +136,11 @@ With α = 0.1 this targets **90%** marginal coverage.
 ## 📸 Dashboard
 
 The Streamlit dashboard includes:
-- **Reliability diagram** — confidence vs accuracy for all three methods.
-- **Confidence distribution** — violin plots showing the spread of max-probabilities.
-- **ECE comparison** — bar chart + method table.
-- **Conformal prediction** — set-size distribution and worked examples.
-- **Sample explorer** — per-sentence probabilities across all methods.
+- **Reliability diagram** confidence vs accuracy for all three methods.
+- **Confidence distribution** violin plots showing the spread of max-probabilities.
+- **ECE comparison** bar chart + method table.
+- **Conformal prediction** set-size distribution and worked examples.
+- **Sample explorer** per-sentence probabilities across all methods.
 
 *(Add screenshots to `screenshots/` and reference them here.)*
 
@@ -150,10 +150,10 @@ The Streamlit dashboard includes:
 
 Directly supports the **Central Bank of Ireland PhD Programme** — *"Framework for Interpretable and Behavioural Risk Assessment of Intelligent Language Models"*:
 
-- **Decision-Making Under Uncertainty** — calibration turns overconfident scores into trustworthy probabilities for downstream risk decisions.
-- **Risk Assessment in Financial Services** — post-hoc calibration corrects miscalibration without retraining.
-- **Statistical Rigour & Formal Guarantees** — conformal prediction gives distribution-free coverage guarantees.
-- **Interpretability** — reliability diagrams and prediction sets make uncertainty explicit and auditable.
+- **Decision-Making Under Uncertainty** calibration turns overconfident scores into trustworthy probabilities for downstream risk decisions.
+- **Risk Assessment in Financial Services** post-hoc calibration corrects miscalibration without retraining.
+- **Statistical Rigour & Formal Guarantees** conformal prediction gives distribution-free coverage guarantees.
+- **Interpretability** reliability diagrams and prediction sets make uncertainty explicit and auditable.
 
 ---
 
