@@ -198,7 +198,7 @@ LLM-Uncertainty-Calibrator/
 
 ## 👤 Author
 
-**Atharva Patil** — MSc Computing (Data Analytics), Dublin City University
+**Atharva Patil** MSc Computing (Data Analytics), Dublin City University
 PhD Applicant, Central Bank of Ireland PhD Programme
 GitHub: [github.com/AtharvaPatil-Data](https://github.com/AtharvaPatil-Data)
 
